@@ -1,0 +1,23 @@
+# Database credentials
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Generated reports and logs
+reports/*.xlsx
+logs/
+
+# Raw and processed datasets
+data/raw/
+data/processed/
+
+# CSV datasets and logs
+*.csv
+
+# Temporary notebooks
+**/Untitled.ipynb
