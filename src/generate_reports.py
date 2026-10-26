@@ -59,10 +59,14 @@ from openpyxl.utils import get_column_letter
 # 1. PROJECT CONFIGURATION
 # ============================================================
 
-BASE_DIR = Path.cwd().parent
+# Locate the project root
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Define output directories
 REPORT_DIR = BASE_DIR / "reports"
 LOG_DIR = BASE_DIR / "logs"
 
+# Create directories if they don't exist
 REPORT_DIR.mkdir(parents=True, exist_ok=True)
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -437,11 +441,19 @@ if __name__ == "__main__":
 import pandas as pd
 from pathlib import Path
 
-report_dir = Path("../reports")
+# Project root directory
+BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Reports folder inside the project
+report_dir = BASE_DIR / "reports"
+
+# Find generated Excel reports
 report_files = sorted(
     report_dir.glob("logistics_kpi_report_*.xlsx")
 )
+
+if not report_files:
+    raise FileNotFoundError(f"No Excel reports found in {report_dir}")
 
 latest_report = report_files[-1]
 
@@ -455,7 +467,6 @@ overall_kpis = pd.read_excel(
 )
 
 print(overall_kpis)
-
 # In[ ]:
 
 
