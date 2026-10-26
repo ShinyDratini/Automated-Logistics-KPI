@@ -4,31 +4,27 @@
 # In[1]:
 
 
-from dotenv import load_dotenv
 from pathlib import Path
+from dotenv import load_dotenv
 import os
 
-# Your notebook is inside the notebooks folder
-env_path = Path("../.env")
+# Find the project root directory
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv(env_path)
+# Locate .env in the project root
+env_path = BASE_DIR / ".env"
 
+# Load environment variables
+load_dotenv(dotenv_path=env_path)
+
+# Verify configuration
+print("Project directory:", BASE_DIR)
 print("Environment file exists:", env_path.exists())
 print("Database host:", os.getenv("DB_HOST"))
 print("Database name:", os.getenv("DB_NAME"))
 print("Database user:", os.getenv("DB_USER"))
 print("Password configured:", bool(os.getenv("DB_PASSWORD")))
-
-
-# In[3]:
-
-
-from pathlib import Path
-
-project_dir = Path("..")
-
-print(".env exists:", (project_dir / ".env").exists())
-print(".gitignore exists:", (project_dir / ".gitignore").exists())
+print(".gitignore exists:", (BASE_DIR / ".gitignore").exists())
 
 
 # In[11]:
@@ -458,8 +454,7 @@ overall_kpis = pd.read_excel(
     sheet_name="Overall_KPIs"
 )
 
-display(overall_kpis)
-
+print(overall_kpis)
 
 # In[ ]:
 
