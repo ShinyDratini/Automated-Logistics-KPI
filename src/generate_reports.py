@@ -390,6 +390,69 @@ def generate_report(connection):
 
     return output_file
 
+# ============================================================
+# 6.1 DATA VALIDATION
+# ============================================================
+
+def validate_data(connection):
+    """Validate order-level data before generating reports."""
+
+    query = """
+    SELECT
+        COUNT(*) AS total_orders,
+        COUNT(DISTINCT order_id) AS unique_orders,
+        SUM(CASE WHEN shipping_date IS NULL THEN 1 ELSE 0 END)
+            AS missing_shipping_dates,
+        SUM(CASE WHEN delivery_status IS NULL THEN 1 ELSE 0 END)
+            AS missing_delivery_status
+    FROM orders
+    """
+
+    cursor = connection.cursor(dictionary=True)
+
+    try:
+        cursor.execute(query)
+        results = cursor.fetchone()
+    finally:
+        cursor.close()
+
+    if not results or results["total_orders"] == 0:
+        raise ValueError("Validation failed: Orders table is empty")
+
+    duplicate_orders = (
+        results["total_orders"] - results["unique_orders"]
+    )
+
+    print("\n========== DATA VALIDATION ==========")
+    print("Total orders:", results["total_orders"])
+    print("Duplicate orders:", duplicate_orders)
+    print("Missing shipping dates:", results["missing_shipping_dates"])
+    print("Missing delivery statuses:", results["missing_delivery_status"])
+
+    logging.info("Total orders: %s", results["total_orders"])
+    logging.info("Duplicate orders: %s", duplicate_orders)
+    logging.info(
+        "Missing shipping dates: %s",
+        results["missing_shipping_dates"]
+    )
+    logging.info(
+        "Missing delivery statuses: %s",
+        results["missing_delivery_status"]
+    )
+
+    if duplicate_orders > 0:
+        raise ValueError(
+            f"Validation failed: {duplicate_orders} duplicate orders"
+        )
+
+    if results["missing_shipping_dates"] > 0:
+        logging.warning("Missing shipping dates detected")
+
+    if results["missing_delivery_status"] > 0:
+        logging.warning("Missing delivery statuses detected")
+
+    print("Data validation completed successfully!")
+
 
 # ============================================================
 # 7. MAIN AUTOMATION WORKFLOW
@@ -404,6 +467,10 @@ def main():
 
         connection = connect_database()
 
+        # Validate database before generating reports
+        validate_data(connection)
+
+        # Generate Excel KPI report
         generate_report(connection)
 
         print("\nAutomation completed successfully!")
@@ -426,7 +493,18 @@ def main():
 # ============================================================
 
 if __name__ == "__main__":
-    main()
+    logging.info("========== Reporting job started ==========")
+
+    try:
+        main()
+        logging.info("Reporting job completed successfully")
+
+    except Exception:
+        logging.exception("Reporting job failed")
+        raise
+
+    finally:
+        logging.info("========== Reporting job ended ==========")
 
 
 # In[ ]:
