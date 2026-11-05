@@ -14,7 +14,7 @@ improve visibility into logistics delivery performance.
 
 ## Power BI Dashboard
 
-![Logistics KPI Dashboard](dashboard/logistics_kpi_dashboard.png)
+![Logistics KPI Dashboard](dashboards/logistics_kpi_dashboard.png)
 
 The interactive Power BI dashboard visualizes logistics performance using automated KPI reports generated from MySQL through Python.
 
