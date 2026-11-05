@@ -3,7 +3,7 @@
 
 # In[1]:
 
-
+import shutil
 from pathlib import Path
 from dotenv import load_dotenv
 import os
@@ -381,12 +381,16 @@ def generate_report(connection):
                 len(df)
             )
 
-    print(f"\nReport saved to: {output_file}")
+    # Save a fixed-name copy for Power BI
+    latest_file = REPORT_DIR / "logistics_kpi_latest.xlsx"
 
-    logging.info(
-        "Report successfully generated: %s",
-        output_file
-    )
+    shutil.copy2(output_file, latest_file)
+
+    print(f"\nReport saved to: {output_file}")
+    print(f"Power BI source updated: {latest_file}")
+
+    logging.info("Report successfully generated: %s", output_file)
+    logging.info("Power BI source updated: %s", latest_file)
 
     return output_file
 
@@ -546,7 +550,3 @@ overall_kpis = pd.read_excel(
 
 print(overall_kpis)
 # In[ ]:
-
-
-
-

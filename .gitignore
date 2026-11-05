@@ -11,6 +11,7 @@ __pycache__/
 # Generated reports and logs
 reports/*.xlsx
 logs/
+*.log
 
 # Raw and processed datasets
 data/raw/

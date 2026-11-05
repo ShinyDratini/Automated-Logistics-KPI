@@ -11,6 +11,30 @@ structured SQL tables and automated Excel performance reports.
 The objective is to reduce manual reporting effort and
 improve visibility into logistics delivery performance.
 
+
+## Power BI Dashboard
+
+![Logistics KPI Dashboard](dashboard/logistics_kpi_dashboard.png)
+
+The interactive Power BI dashboard visualizes logistics performance using automated KPI reports generated from MySQL through Python.
+
+### Dashboard Features
+
+- **KPI Overview:** 62,897 completed orders, 26,849 on-time orders, and a 42.69% on-time delivery rate.
+- **Shipping Mode Analysis:** Compares delivery performance across Standard Class, Same Day, Second Class, and First Class.
+- **Regional Performance:** Highlights the top 10 regions by late order volume.
+- **Monthly Delivery Trends:** Tracks on-time delivery performance over time.
+- **Completed vs Late Orders:** Compares monthly order volumes and delivery delays.
+- **Year Filter:** Allows users to interactively explore monthly performance trends.
+
+### Automation Workflow
+
+MySQL Database → Python Reporting Script → Excel Reports → Power BI Dashboard
+
+The Python reporting script is scheduled using Windows Task Scheduler and produces both timestamped historical reports and a fixed-name Excel workbook for Power BI refresh.
+
+**Note:** Power BI Desktop refresh is currently manual; the underlying Excel report generation is automated.
+
 ## Technology Stack
 
 - Python
